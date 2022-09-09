@@ -1,6 +1,8 @@
 package matias.giorda.electionsexample.controller;
 
 import matias.giorda.electionsexample.dto.ElectionDTO;
+import matias.giorda.electionsexample.dto.ElectionResultDTO;
+import matias.giorda.electionsexample.dto.VoteDTO;
 import matias.giorda.electionsexample.exception.DataNotFoundException;
 import matias.giorda.electionsexample.model.Election;
 import matias.giorda.electionsexample.service.ElectionService;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/candidates")
+@RequestMapping("/elections")
 public class ElectionController {
 
     private final ElectionService electionService;
@@ -37,15 +39,25 @@ public class ElectionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ElectionDTO> getElectionsById(@PathVariable(value = "id") Long electionId)
+    public ResponseEntity<ElectionDTO> getElectionById(@PathVariable(value = "id") Long electionId)
             throws DataNotFoundException {
         Election election = electionService.getElection(electionId);
         return ResponseEntity.ok().body(convertToDto(election));
     }
 
+    @GetMapping("/{id}/result")
+    public ResponseEntity<ElectionResultDTO> getElectionsResult(@PathVariable(value = "id") Long electionId) {
+        return ResponseEntity.ok().body(electionService.getElectionResult(electionId));
+    }
+
     @PostMapping
-    public ElectionDTO createElection(@RequestBody ElectionDTO election) throws DataNotFoundException {
-        return convertToDto(electionService.save(election));
+    public ResponseEntity<ElectionDTO> createElection(@RequestBody ElectionDTO election) throws DataNotFoundException {
+        return  ResponseEntity.ok().body(convertToDto(electionService.save(election)));
+    }
+
+    @PostMapping("/{id}/votes")
+    public ResponseEntity<ElectionDTO> addVote(@RequestBody VoteDTO vote, @PathVariable(value = "id") Long electionId) throws DataNotFoundException {
+        return ResponseEntity.ok(convertToDto(electionService.addVote(vote, electionId)));
     }
 
     @PutMapping("/{id}")
@@ -62,7 +74,9 @@ public class ElectionController {
     }
 
     private ElectionDTO convertToDto(Election election) {
-        return modelMapper.map(election, ElectionDTO.class);
+        ElectionDTO electionDTO = modelMapper.map(election, ElectionDTO.class);
+        electionDTO.setVoteCount(election.getVotes().size());
+        return electionDTO;
     }
 
 }

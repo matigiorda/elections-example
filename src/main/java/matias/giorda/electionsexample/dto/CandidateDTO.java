@@ -1,5 +1,7 @@
 package matias.giorda.electionsexample.dto;
 
+import matias.giorda.electionsexample.model.Candidate;
+
 import javax.validation.constraints.NotNull;
 
 public class CandidateDTO {
@@ -9,7 +11,9 @@ public class CandidateDTO {
     @NotNull
     private String name;
 
-    public CandidateDTO() {
+    public CandidateDTO(Candidate candidate) {
+        this.id = candidate.getId();
+        this.name = candidate.getName();
     }
 
     public Long getId() {

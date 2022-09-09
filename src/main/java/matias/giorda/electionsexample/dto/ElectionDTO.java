@@ -1,13 +1,12 @@
 package matias.giorda.electionsexample.dto;
 
-import javax.validation.constraints.NotNull;
-
 public class ElectionDTO {
 
     private Long id;
 
-    @NotNull
     private String name;
+
+    private Integer voteCount;
 
     public ElectionDTO() {
     }
@@ -26,5 +25,13 @@ public class ElectionDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
     }
 }

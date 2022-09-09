@@ -44,8 +44,8 @@ public class CandidateController {
     }
 
     @PostMapping
-    public CandidateDTO createCandidate(@RequestBody CandidateDTO candidate) throws DataNotFoundException {
-        return convertToDto(candidateService.save(candidate));
+    public ResponseEntity<CandidateDTO> createCandidate(@RequestBody CandidateDTO candidate) {
+        return ResponseEntity.ok(convertToDto(candidateService.save(candidate)));
     }
 
     @PutMapping("/{id}")

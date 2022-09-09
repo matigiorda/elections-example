@@ -39,12 +39,12 @@ public class CandidateService {
         return this.findOne(candidateId)
                 .orElseThrow(() -> new DataNotFoundException("Candidate not found :: " + candidateId));
     }
-    public Candidate save(CandidateDTO candidateDTO) throws DataNotFoundException {
-        return candidateRepository.saveAndFlush(convertToEntity(candidateDTO, Optional.empty()));
+    public Candidate save(CandidateDTO candidateDTO) {
+        return candidateRepository.saveAndFlush(convertToEntity(candidateDTO, new Candidate()));
     }
 
     public Candidate update(Long candidateId, CandidateDTO candidateDTO) throws DataNotFoundException {
-        return candidateRepository.save(convertToEntity(candidateDTO, Optional.of(candidateId)));
+        return candidateRepository.save(convertToEntity(candidateDTO, findOne(candidateId).orElseThrow(() -> new DataNotFoundException("Candidate not found to update :: " + candidateId))));
     }
 
     public Candidate delete(Long candidateId) throws DataNotFoundException {
@@ -53,10 +53,7 @@ public class CandidateService {
         return candidate;
     }
 
-    private Candidate convertToEntity(CandidateDTO candidateDTO, Optional<Long> candidateId) throws DataNotFoundException {
-        Optional<Candidate> candidateOptional = candidateId.map(this::findOne).orElse(Optional.of(new Candidate()));
-        Candidate candidate = candidateOptional
-                .orElseThrow(() -> new DataNotFoundException("Candidate not found to convert to entity :: " + candidateId));
+    private Candidate convertToEntity(CandidateDTO candidateDTO, Candidate candidate) {
         modelMapper.map(candidateDTO, candidate);
         return candidate;
     }

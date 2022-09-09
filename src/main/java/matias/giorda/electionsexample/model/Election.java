@@ -1,6 +1,10 @@
 package matias.giorda.electionsexample.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
+
+import java.util.Collections;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -12,10 +16,15 @@ public class Election {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
 
+    @Null
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes;
+
     public Election() {
+        this.votes = Collections.emptyList();
     }
 
     public Long getId() {
@@ -33,4 +42,17 @@ public class Election {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
+
+    public void addVote(Vote vote) {
+        this.votes.add(vote);
+    }
+
 }
