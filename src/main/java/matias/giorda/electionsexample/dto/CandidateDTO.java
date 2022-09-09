@@ -11,6 +11,10 @@ public class CandidateDTO {
     @NotNull
     private String name;
 
+    public CandidateDTO(){
+
+    }
+
     public CandidateDTO(Candidate candidate) {
         this.id = candidate.getId();
         this.name = candidate.getName();

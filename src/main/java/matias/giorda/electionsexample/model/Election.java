@@ -3,7 +3,7 @@ package matias.giorda.electionsexample.model;
 import javax.persistence.*;
 import javax.validation.constraints.Null;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -24,7 +24,7 @@ public class Election {
     private List<Vote> votes;
 
     public Election() {
-        this.votes = Collections.emptyList();
+        this.votes = new ArrayList<>();
     }
 
     public Long getId() {
